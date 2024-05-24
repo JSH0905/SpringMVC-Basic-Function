@@ -1,10 +1,12 @@
 package hello.springmvc.basic.request;
 
 
+import hello.springmvc.basic.HelloData;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -89,6 +91,29 @@ public class RequestParamController {
     public String requestParamMap(@RequestParam Map<String, Object> paramMap) {
 
         log.info("username={}, age={}", paramMap.get("username"), paramMap.get("age"));
+        return "ok";
+    }
+
+    @ResponseBody
+    @RequestMapping("/model-attribute-v1")
+    public String modelAttributeV1(@ModelAttribute HelloData helloData) {
+
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+
+        return "ok";
+    }
+
+    /**
+     * @ModelAttribute 생략 가능.
+     * String, int, Integer 와 같은 단순 타입이면 스프링이 @RequestParam로 처리
+     * 예제 코드의 HelloData처럼 내가 직접 만든 객체들은 @ModelAttribute로 처리. 단, HttpServletRequest와 같은 argument resolver로 지정해준 타입은 예외.
+     */
+    @ResponseBody
+    @RequestMapping("/model-attribute-v2")
+    public String modelAttributeV2(HelloData helloData) {
+
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+
         return "ok";
     }
 }
